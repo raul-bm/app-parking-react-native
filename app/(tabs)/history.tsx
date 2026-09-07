@@ -3,7 +3,7 @@ import { formatDate } from '@/utils/formatDate';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Text, View } from 'react-native';
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { useFocusEffect } from 'expo-router';
 import { usePins } from '@/context/PinsContext';
 import { PinDetailSheet } from '@/components/PinDetailSheet';
@@ -20,7 +20,7 @@ export default function HistoryPage() {
 
   useEffect(() => {
     if (selectedPin) {
-      setTimeout(() => bottomSheetRef.current?.expand(), 30);
+      requestAnimationFrame(() => bottomSheetRef.current?.expand());
     }
   }, [selectedPin]);
 
