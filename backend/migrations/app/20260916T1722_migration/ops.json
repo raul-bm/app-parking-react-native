@@ -1,0 +1,1228 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.friendship",
+    "label": "Create table \"friendship\"",
+    "summary": "Creates table \"friendship\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "friendship"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"friendship\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"friendship\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"friendship\"",
+        "sql": "CREATE TABLE \"public\".\"friendship\" (\n  \"addresseeId\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"requesterId\" text NOT NULL,\n  \"status\" text DEFAULT 'PENDING' NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"friendship_status_check_f0e5c74c\" CHECK (\"status\" IN ('PENDING', 'ACCEPTED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"friendship\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"friendship\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.group",
+    "label": "Create table \"group\"",
+    "summary": "Creates table \"group\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "group"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"group\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"group\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"group\"",
+        "sql": "CREATE TABLE \"public\".\"group\" (\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"ownerId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"group\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"group\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.groupMember",
+    "label": "Create table \"groupMember\"",
+    "summary": "Creates table \"groupMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "groupMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"groupMember\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"groupMember\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"groupMember\"",
+        "sql": "CREATE TABLE \"public\".\"groupMember\" (\n  \"groupId\" text NOT NULL,\n  \"userId\" text NOT NULL,\n  PRIMARY KEY (\"groupId\", \"userId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"groupMember\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"groupMember\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pin",
+    "label": "Create table \"pin\"",
+    "summary": "Creates table \"pin\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pin"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pin\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pin\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pin\"",
+        "sql": "CREATE TABLE \"public\".\"pin\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"lat\" float8 NOT NULL,\n  \"long\" float8 NOT NULL,\n  \"note\" text,\n  \"ownerId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pin\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pin\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pinShareGroup",
+    "label": "Create table \"pinShareGroup\"",
+    "summary": "Creates table \"pinShareGroup\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pinShareGroup"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pinShareGroup\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareGroup\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pinShareGroup\"",
+        "sql": "CREATE TABLE \"public\".\"pinShareGroup\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"groupId\" text NOT NULL,\n  \"pinId\" text NOT NULL,\n  PRIMARY KEY (\"pinId\", \"groupId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pinShareGroup\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareGroup\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.pinShareUser",
+    "label": "Create table \"pinShareUser\"",
+    "summary": "Creates table \"pinShareUser\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "pinShareUser"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"pinShareUser\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareUser\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"pinShareUser\"",
+        "sql": "CREATE TABLE \"public\".\"pinShareUser\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"pinId\" text NOT NULL,\n  \"userId\" text NOT NULL,\n  PRIMARY KEY (\"pinId\", \"userId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"pinShareUser\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareUser\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.user",
+    "label": "Create table \"user\"",
+    "summary": "Creates table \"user\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"user\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"user\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"user\"",
+        "sql": "CREATE TABLE \"public\".\"user\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"passwordHash\" text NOT NULL,\n  \"realName\" text NOT NULL,\n  \"username\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"user\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"user\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.friendship.friendship_requesterId_addresseeId_key",
+    "label": "Add unique constraint on \"friendship\" (requesterId, addresseeId)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "friendship_requesterId_addresseeId_key",
+        "table": "friendship"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"friendship_requesterId_addresseeId_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "friendship_requesterId_addresseeId_key",
+          "public",
+          "\"public\".\"friendship\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"friendship_requesterId_addresseeId_key\"",
+        "sql": "ALTER TABLE \"public\".\"friendship\" ADD CONSTRAINT \"friendship_requesterId_addresseeId_key\" UNIQUE (\"requesterId\", \"addresseeId\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"friendship_requesterId_addresseeId_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "friendship_requesterId_addresseeId_key",
+          "public",
+          "\"public\".\"friendship\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.user.user_email_key",
+    "label": "Add unique constraint on \"user\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "user_email_key",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"user_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_email_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"user_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"user\" ADD CONSTRAINT \"user_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"user_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_email_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.user.user_username_key",
+    "label": "Add unique constraint on \"user\" (username)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "user_username_key",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"user_username_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_username_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"user_username_key\"",
+        "sql": "ALTER TABLE \"public\".\"user\" ADD CONSTRAINT \"user_username_key\" UNIQUE (\"username\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"user_username_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_username_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.friendship.friendship_addresseeId_idx_d745efab",
+    "label": "Create index \"friendship_addresseeId_idx_d745efab\" on \"friendship\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "friendship_addresseeId_idx_d745efab",
+        "table": "friendship"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"friendship_addresseeId_idx_d745efab\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"friendship_addresseeId_idx_d745efab\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"friendship_addresseeId_idx_d745efab\"",
+        "sql": "CREATE INDEX \"friendship_addresseeId_idx_d745efab\" ON \"public\".\"friendship\" (\"addresseeId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"friendship_addresseeId_idx_d745efab\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"friendship_addresseeId_idx_d745efab\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.friendship.friendship_requesterId_idx_a5f4af92",
+    "label": "Create index \"friendship_requesterId_idx_a5f4af92\" on \"friendship\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "friendship_requesterId_idx_a5f4af92",
+        "table": "friendship"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"friendship_requesterId_idx_a5f4af92\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"friendship_requesterId_idx_a5f4af92\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"friendship_requesterId_idx_a5f4af92\"",
+        "sql": "CREATE INDEX \"friendship_requesterId_idx_a5f4af92\" ON \"public\".\"friendship\" (\"requesterId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"friendship_requesterId_idx_a5f4af92\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"friendship_requesterId_idx_a5f4af92\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.group.group_ownerId_idx_e2d0c1ef",
+    "label": "Create index \"group_ownerId_idx_e2d0c1ef\" on \"group\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "group_ownerId_idx_e2d0c1ef",
+        "table": "group"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"group_ownerId_idx_e2d0c1ef\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"group_ownerId_idx_e2d0c1ef\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"group_ownerId_idx_e2d0c1ef\"",
+        "sql": "CREATE INDEX \"group_ownerId_idx_e2d0c1ef\" ON \"public\".\"group\" (\"ownerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"group_ownerId_idx_e2d0c1ef\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"group_ownerId_idx_e2d0c1ef\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.groupMember.groupMember_groupId_idx_e2fb5578",
+    "label": "Create index \"groupMember_groupId_idx_e2fb5578\" on \"groupMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "groupMember_groupId_idx_e2fb5578",
+        "table": "groupMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"groupMember_groupId_idx_e2fb5578\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"groupMember_groupId_idx_e2fb5578\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"groupMember_groupId_idx_e2fb5578\"",
+        "sql": "CREATE INDEX \"groupMember_groupId_idx_e2fb5578\" ON \"public\".\"groupMember\" (\"groupId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"groupMember_groupId_idx_e2fb5578\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"groupMember_groupId_idx_e2fb5578\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.groupMember.groupMember_userId_idx_a489d58a",
+    "label": "Create index \"groupMember_userId_idx_a489d58a\" on \"groupMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "groupMember_userId_idx_a489d58a",
+        "table": "groupMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"groupMember_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"groupMember_userId_idx_a489d58a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"groupMember_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"groupMember_userId_idx_a489d58a\" ON \"public\".\"groupMember\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"groupMember_userId_idx_a489d58a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"groupMember_userId_idx_a489d58a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pin.pin_ownerId_idx_e2d0c1ef",
+    "label": "Create index \"pin_ownerId_idx_e2d0c1ef\" on \"pin\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pin_ownerId_idx_e2d0c1ef",
+        "table": "pin"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pin_ownerId_idx_e2d0c1ef\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pin_ownerId_idx_e2d0c1ef\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pin_ownerId_idx_e2d0c1ef\"",
+        "sql": "CREATE INDEX \"pin_ownerId_idx_e2d0c1ef\" ON \"public\".\"pin\" (\"ownerId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pin_ownerId_idx_e2d0c1ef\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pin_ownerId_idx_e2d0c1ef\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pinShareGroup.pinShareGroup_groupId_idx_e2fb5578",
+    "label": "Create index \"pinShareGroup_groupId_idx_e2fb5578\" on \"pinShareGroup\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pinShareGroup_groupId_idx_e2fb5578",
+        "table": "pinShareGroup"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pinShareGroup_groupId_idx_e2fb5578\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareGroup_groupId_idx_e2fb5578\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pinShareGroup_groupId_idx_e2fb5578\"",
+        "sql": "CREATE INDEX \"pinShareGroup_groupId_idx_e2fb5578\" ON \"public\".\"pinShareGroup\" (\"groupId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pinShareGroup_groupId_idx_e2fb5578\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareGroup_groupId_idx_e2fb5578\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pinShareGroup.pinShareGroup_pinId_idx_77bab7d3",
+    "label": "Create index \"pinShareGroup_pinId_idx_77bab7d3\" on \"pinShareGroup\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pinShareGroup_pinId_idx_77bab7d3",
+        "table": "pinShareGroup"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pinShareGroup_pinId_idx_77bab7d3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareGroup_pinId_idx_77bab7d3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pinShareGroup_pinId_idx_77bab7d3\"",
+        "sql": "CREATE INDEX \"pinShareGroup_pinId_idx_77bab7d3\" ON \"public\".\"pinShareGroup\" (\"pinId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pinShareGroup_pinId_idx_77bab7d3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareGroup_pinId_idx_77bab7d3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pinShareUser.pinShareUser_pinId_idx_77bab7d3",
+    "label": "Create index \"pinShareUser_pinId_idx_77bab7d3\" on \"pinShareUser\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pinShareUser_pinId_idx_77bab7d3",
+        "table": "pinShareUser"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pinShareUser_pinId_idx_77bab7d3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareUser_pinId_idx_77bab7d3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pinShareUser_pinId_idx_77bab7d3\"",
+        "sql": "CREATE INDEX \"pinShareUser_pinId_idx_77bab7d3\" ON \"public\".\"pinShareUser\" (\"pinId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pinShareUser_pinId_idx_77bab7d3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareUser_pinId_idx_77bab7d3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.pinShareUser.pinShareUser_userId_idx_a489d58a",
+    "label": "Create index \"pinShareUser_userId_idx_a489d58a\" on \"pinShareUser\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "pinShareUser_userId_idx_a489d58a",
+        "table": "pinShareUser"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"pinShareUser_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareUser_userId_idx_a489d58a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"pinShareUser_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"pinShareUser_userId_idx_a489d58a\" ON \"public\".\"pinShareUser\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"pinShareUser_userId_idx_a489d58a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"pinShareUser_userId_idx_a489d58a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.friendship.friendship_requesterId_fkey",
+    "label": "Add foreign key \"friendship_requesterId_fkey\" on \"friendship\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "friendship_requesterId_fkey",
+        "table": "friendship"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"friendship_requesterId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "friendship_requesterId_fkey",
+          "public",
+          "\"public\".\"friendship\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"friendship_requesterId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"friendship\"\nADD CONSTRAINT \"friendship_requesterId_fkey\"\nFOREIGN KEY (\"requesterId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"friendship_requesterId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "friendship_requesterId_fkey",
+          "public",
+          "\"public\".\"friendship\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.friendship.friendship_addresseeId_fkey",
+    "label": "Add foreign key \"friendship_addresseeId_fkey\" on \"friendship\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "friendship_addresseeId_fkey",
+        "table": "friendship"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"friendship_addresseeId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "friendship_addresseeId_fkey",
+          "public",
+          "\"public\".\"friendship\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"friendship_addresseeId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"friendship\"\nADD CONSTRAINT \"friendship_addresseeId_fkey\"\nFOREIGN KEY (\"addresseeId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"friendship_addresseeId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "friendship_addresseeId_fkey",
+          "public",
+          "\"public\".\"friendship\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.group.group_ownerId_fkey",
+    "label": "Add foreign key \"group_ownerId_fkey\" on \"group\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "group_ownerId_fkey",
+        "table": "group"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"group_ownerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "group_ownerId_fkey",
+          "public",
+          "\"public\".\"group\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"group_ownerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"group\"\nADD CONSTRAINT \"group_ownerId_fkey\"\nFOREIGN KEY (\"ownerId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"group_ownerId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "group_ownerId_fkey",
+          "public",
+          "\"public\".\"group\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.groupMember.groupMember_groupId_fkey",
+    "label": "Add foreign key \"groupMember_groupId_fkey\" on \"groupMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "groupMember_groupId_fkey",
+        "table": "groupMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"groupMember_groupId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "groupMember_groupId_fkey",
+          "public",
+          "\"public\".\"groupMember\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"groupMember_groupId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"groupMember\"\nADD CONSTRAINT \"groupMember_groupId_fkey\"\nFOREIGN KEY (\"groupId\")\nREFERENCES \"public\".\"group\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"groupMember_groupId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "groupMember_groupId_fkey",
+          "public",
+          "\"public\".\"groupMember\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.groupMember.groupMember_userId_fkey",
+    "label": "Add foreign key \"groupMember_userId_fkey\" on \"groupMember\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "groupMember_userId_fkey",
+        "table": "groupMember"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"groupMember_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "groupMember_userId_fkey",
+          "public",
+          "\"public\".\"groupMember\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"groupMember_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"groupMember\"\nADD CONSTRAINT \"groupMember_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"groupMember_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "groupMember_userId_fkey",
+          "public",
+          "\"public\".\"groupMember\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pin.pin_ownerId_fkey",
+    "label": "Add foreign key \"pin_ownerId_fkey\" on \"pin\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pin_ownerId_fkey",
+        "table": "pin"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pin_ownerId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pin_ownerId_fkey",
+          "public",
+          "\"public\".\"pin\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pin_ownerId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pin\"\nADD CONSTRAINT \"pin_ownerId_fkey\"\nFOREIGN KEY (\"ownerId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pin_ownerId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pin_ownerId_fkey",
+          "public",
+          "\"public\".\"pin\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pinShareGroup.pinShareGroup_pinId_fkey",
+    "label": "Add foreign key \"pinShareGroup_pinId_fkey\" on \"pinShareGroup\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pinShareGroup_pinId_fkey",
+        "table": "pinShareGroup"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pinShareGroup_pinId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareGroup_pinId_fkey",
+          "public",
+          "\"public\".\"pinShareGroup\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pinShareGroup_pinId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pinShareGroup\"\nADD CONSTRAINT \"pinShareGroup_pinId_fkey\"\nFOREIGN KEY (\"pinId\")\nREFERENCES \"public\".\"pin\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pinShareGroup_pinId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareGroup_pinId_fkey",
+          "public",
+          "\"public\".\"pinShareGroup\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pinShareGroup.pinShareGroup_groupId_fkey",
+    "label": "Add foreign key \"pinShareGroup_groupId_fkey\" on \"pinShareGroup\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pinShareGroup_groupId_fkey",
+        "table": "pinShareGroup"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pinShareGroup_groupId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareGroup_groupId_fkey",
+          "public",
+          "\"public\".\"pinShareGroup\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pinShareGroup_groupId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pinShareGroup\"\nADD CONSTRAINT \"pinShareGroup_groupId_fkey\"\nFOREIGN KEY (\"groupId\")\nREFERENCES \"public\".\"group\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pinShareGroup_groupId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareGroup_groupId_fkey",
+          "public",
+          "\"public\".\"pinShareGroup\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pinShareUser.pinShareUser_pinId_fkey",
+    "label": "Add foreign key \"pinShareUser_pinId_fkey\" on \"pinShareUser\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pinShareUser_pinId_fkey",
+        "table": "pinShareUser"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pinShareUser_pinId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareUser_pinId_fkey",
+          "public",
+          "\"public\".\"pinShareUser\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pinShareUser_pinId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pinShareUser\"\nADD CONSTRAINT \"pinShareUser_pinId_fkey\"\nFOREIGN KEY (\"pinId\")\nREFERENCES \"public\".\"pin\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pinShareUser_pinId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareUser_pinId_fkey",
+          "public",
+          "\"public\".\"pinShareUser\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.pinShareUser.pinShareUser_userId_fkey",
+    "label": "Add foreign key \"pinShareUser_userId_fkey\" on \"pinShareUser\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "pinShareUser_userId_fkey",
+        "table": "pinShareUser"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"pinShareUser_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareUser_userId_fkey",
+          "public",
+          "\"public\".\"pinShareUser\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"pinShareUser_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"pinShareUser\"\nADD CONSTRAINT \"pinShareUser_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"pinShareUser_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "pinShareUser_userId_fkey",
+          "public",
+          "\"public\".\"pinShareUser\""
+        ]
+      }
+    ]
+  }
+]
