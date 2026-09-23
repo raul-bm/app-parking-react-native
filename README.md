@@ -39,18 +39,18 @@
   - `POST /pins/:id/share/group` — Compartir con grupo
   - `DELETE /pins/:id/share/user/:userId` — Quitar share usuario
   - `DELETE /pins/:id/share/group/:groupId` — Quitar share grupo
+- [x] **GroupsModule** — CRUD grupos + gestión de miembros
+  - `POST /groups` — Crear grupo (owner = userId)
+  - `GET /groups` — Listar grupos propios
+  - `GET /groups/:id` — Detalle (owner o miembro)
+  - `PATCH /groups/:id` — Actualizar nombre (solo owner)
+  - `DELETE /groups/:id` — Eliminar (solo owner)
+  - `POST /groups/:id/members` — Añadir miembro (solo owner)
+  - `DELETE /groups/:id/members/:userId` — Quitar miembro (solo owner)
+  - `GET /groups/:id/members` — Listar miembros (owner/miembros)
 
 ### 🚧 En progreso / Pendientes
 
-- [ ] **GroupsModule** — CRUD grupos + gestión de miembros
-  - [ ] `POST /groups` — Crear grupo (owner = userId)
-  - [ ] `GET /groups` — Listar grupos propios
-  - [ ] `GET /groups/:id` — Detalle (owner o miembro)
-  - [ ] `PATCH /groups/:id` — Actualizar nombre (solo owner)
-  - [ ] `DELETE /groups/:id` — Eliminar (solo owner)
-  - [ ] `POST /groups/:id/members` — Añadir miembro (solo owner)
-  - [ ] `DELETE /groups/:id/members/:userId` — Quitar miembro (solo owner)
-  - [ ] `GET /groups/:id/members` — Listar miembros (owner/miembros)
 - [ ] **FriendshipsModule** — Solicitudes de amistad
   - [ ] `POST /friendships/request` — Enviar solicitud
   - [ ] `PATCH /friendships/:id/accept` — Aceptar
@@ -66,7 +66,7 @@
 - [ ] **Docker Compose** — PostgreSQL + backend + frontend
 - [ ] **Tests** — Unit + e2e (Jest)
 
-### 📱 Frontend (pendiente iniciar)
+### 📱 Frontend
 
 - [x] Setup Expo + TypeScript + Navigation
 - [x] Auth screens (Login, Register)
